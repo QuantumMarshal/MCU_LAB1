@@ -86,28 +86,28 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
-  int counter = 0;
-  HAL_GPIO_WritePin ( LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_SET ) ;
-  HAL_GPIO_WritePin ( LED_YELLOW_GPIO_Port, LED_YELLOW_Pin, GPIO_PIN_RESET ) ;
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+
+  // Init counter
+  int counter = 0;
+
+  HAL_GPIO_WritePin ( LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_SET ) ;
+  HAL_GPIO_WritePin ( LED_YELLOW_GPIO_Port, LED_YELLOW_Pin, GPIO_PIN_RESET ) ;
+
   while (1)
   {
-	  if (counter == 2){
-		  HAL_GPIO_WritePin ( LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_RESET ) ;
-		  HAL_GPIO_WritePin ( LED_YELLOW_GPIO_Port, LED_YELLOW_Pin, GPIO_PIN_SET ) ;
+	  if (counter == 0 || counter == 2){
+		  HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
+		  HAL_GPIO_TogglePin(LED_YELLOW_GPIO_Port, LED_YELLOW_Pin);
 	  }
 
-	  else if (counter == 4){
-		  HAL_GPIO_WritePin ( LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_SET ) ;
-		  HAL_GPIO_WritePin ( LED_YELLOW_GPIO_Port, LED_YELLOW_Pin, GPIO_PIN_RESET ) ;
-		  counter = -1;
-	  }
-	  counter++;
+	  counter = (counter + 1) % 4;
 
+	  // Delay
 	  HAL_Delay(1000);
     /* USER CODE END WHILE */
 
