@@ -54,10 +54,16 @@ static void MX_GPIO_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+// FSM (3 state -- RED -> GREEN -> YELLOW)
+typedef enum {
+	RED,
+	GREEN,
+	YELLOW
+} eTrafficLightState;
+
 const int RED_TIME = 5;
 const int YELLOW_TIME = 2;
 const int GREEN_TIME = 3;
-
 /* USER CODE END 0 */
 
 /**
@@ -94,10 +100,8 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  //LED STATUS RED -> GREEN -> YELLOW
-  int red_counter = RED_TIME;
-  int green_counter = 0;
-  int yellow_counter = 0;
+  int counterHor = 0;
+  eTrafficLightState current_state_hor = RED;
 
   //SET ALL LEDs OFF
   HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin,SET);
@@ -105,37 +109,37 @@ int main(void)
   HAL_GPIO_WritePin(LED_YELLOW_GPIO_Port, LED_YELLOW_Pin, SET);
   while (1)
   {
-	  if (red_counter > 0){
+	  counterHor++;
+	  switch (current_state_hor){
+	  case RED:
 		  HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, RESET);
 		  HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, SET);
 		  HAL_GPIO_WritePin(LED_YELLOW_GPIO_Port, LED_YELLOW_Pin, SET);
-		  red_counter--;
-		  if (red_counter == 0){
-			  red_counter = 0;
-			  green_counter = GREEN_TIME;
+		  if (counterHor >= RED_TIME){
+			  current_state_hor = GREEN;
+			  counterHor = 0;
 		  }
-	  }
+		  break;
 
-	  else if (green_counter > 0){
+	  case GREEN:
 		  HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin,SET);
 		  HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, RESET);
 		  HAL_GPIO_WritePin(LED_YELLOW_GPIO_Port, LED_YELLOW_Pin, SET);
-		  green_counter--;
-		  if (green_counter == 0){
-			  green_counter = 0;
-			  yellow_counter = YELLOW_TIME;
+		  if (counterHor >= GREEN_TIME){
+			  current_state_hor = YELLOW;
+			  counterHor = 0;
 		  }
-	  }
+		  break;
 
-	  else if (yellow_counter > 0){
+	  case YELLOW:
 		  HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin,SET);
 		  HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, SET);
 		  HAL_GPIO_WritePin(LED_YELLOW_GPIO_Port, LED_YELLOW_Pin, RESET);
-		  yellow_counter--;
-		  if (yellow_counter == 0){
-			  yellow_counter = 0;
-			  red_counter = RED_TIME;
+		  if (counterHor >= YELLOW_TIME){
+			  current_state_hor = RED;
+			  counterHor = 0;
 		  }
+		  break;
 	  }
 
 	  HAL_Delay(1000);
