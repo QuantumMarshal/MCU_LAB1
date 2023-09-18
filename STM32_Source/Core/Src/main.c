@@ -210,13 +210,10 @@ int main(void)
 	  if (min >= MINUTE) {
 		  hour++;
 		  min = 0;
-		  sec = 0;
 	  }
 
 	  if (hour >= HOUR){
 		  hour = 0;
-		  min = 0;
-		  sec = 0;
 	  }
 	  setNumberOnClock(hour);
 	  setNumberOnClock(min/5);
