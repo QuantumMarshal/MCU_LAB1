@@ -195,7 +195,7 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  int sec = 0;
+  int sec = 59;
   int min = 0;
   int hour = 0;
 
