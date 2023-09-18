@@ -195,25 +195,25 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  int sec = 59;
+  int sec = 0;
   int min = 0;
   int hour = 0;
 
   while (1)
   {
 	  clearAllClock();
-	  if (sec == SECOND){
+	  if (sec >= SECOND){
 		  min++;
 		  sec = 0;
 	  }
 
-	  if (min == MINUTE) {
+	  if (min >= MINUTE) {
 		  hour++;
 		  min = 0;
 		  sec = 0;
 	  }
 
-	  if (hour == HOUR){
+	  if (hour >= HOUR){
 		  hour = 0;
 		  min = 0;
 		  sec = 0;
@@ -223,7 +223,7 @@ int main(void)
 	  setNumberOnClock(sec/5);
 	  sec++;
 
-	  HAL_Delay(1000);
+	  HAL_Delay(25);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
